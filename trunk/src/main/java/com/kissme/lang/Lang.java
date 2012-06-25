@@ -245,9 +245,9 @@ public abstract class Lang {
 	 */
 	public static <T extends Serializable> void serialize(T obj, OutputStream out) {
 		ObjectOutputStream oos = null;
-		
+
 		try {
-			
+
 			oos = new ObjectOutputStream(out);
 			oos.writeObject(obj);
 			oos.flush();
@@ -275,6 +275,16 @@ public abstract class Lang {
 		} finally {
 			IOs.freeQuietly(ooi, in);
 		}
+	}
+
+	/**
+	 * 
+	 * @param actual
+	 * @param safe
+	 * @return
+	 */
+	public static <T> T nullSafe(T actual, T safe) {
+		return null == actual ? safe : actual;
 	}
 
 	/**
