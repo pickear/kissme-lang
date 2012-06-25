@@ -217,6 +217,11 @@ public abstract class Lang {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T extends Serializable> T clone(T prototype) {
+
+		if (prototype instanceof Cloneable) {
+			return (T) Ghost.me(prototype.getClass()).invoke(prototype, "clone");
+		}
+
 		ObjectOutputStream oos = null;
 		ObjectInputStream ois = null;
 
@@ -285,6 +290,56 @@ public abstract class Lang {
 	 */
 	public static <T> T nullSafe(T actual, T safe) {
 		return null == actual ? safe : actual;
+	}
+
+	/**
+	 * 
+	 * @param type
+	 * @param length
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T[] newArray(Class<T> type, int length) {
+		return (T[]) Array.newInstance(type, length);
+	}
+
+	/**
+	 * 
+	 * @param reference
+	 * @param length
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T[] newArray(T[] reference, int length) {
+		Class<?> type = reference.getClass().getComponentType();
+		return (T[]) Array.newInstance(type, length);
+	}
+
+	/**
+	 * 
+	 * @param first
+	 * @param second
+	 * @param type
+	 * @return
+	 */
+	public static <T> T[] concat(T[] first, T[] second, Class<T> type) {
+		T[] result = newArray(type, first.length + second.length);
+		System.arraycopy(first, 0, result, 0, first.length);
+		System.arraycopy(second, 0, result, first.length, second.length);
+		return result;
+	}
+
+	/**
+	 * 
+	 * @param element
+	 * @param array
+	 * @return
+	 */
+	public static <T> T[] concat(T element, T[] array) {
+		T[] result = newArray(array, array.length + 1);
+		result[0] = element;
+		System.arraycopy(array, 0, result, 1, array.length);
+		return result;
 	}
 
 	/**
