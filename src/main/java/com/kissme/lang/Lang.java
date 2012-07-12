@@ -38,6 +38,15 @@ public abstract class Lang {
 
 	/**
 	 * 
+	 * @param message
+	 * @return
+	 */
+	public static RuntimeException oneThrow(String message) {
+		return new RuntimeException(message);
+	}
+
+	/**
+	 * 
 	 * @param e
 	 * @return
 	 */
@@ -216,30 +225,20 @@ public abstract class Lang {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T extends Serializable> T clone(T prototype) {
+	public static <T> T clone(T prototype) {
 
-		if (prototype instanceof Cloneable) {
-			return (T) Ghost.me(prototype.getClass()).invoke(prototype, "clone");
+		Ghost<T> me = (Ghost<T>) Ghost.me(prototype.getClass());
+		if (me.openEyes().isOf(Cloneable.class)) {
+			return (T) me.invoke(prototype, "clone");
 		}
 
-		ObjectOutputStream oos = null;
-		ObjectInputStream ois = null;
-
-		try {
+		if (me.openEyes().isOf(Serializable.class)) {
 			ByteArrayOutputStream bao = new ByteArrayOutputStream();
-			oos = new ObjectOutputStream(bao);
-			oos.writeObject(prototype);
-			oos.flush();
-
-			ByteArrayInputStream bai = new ByteArrayInputStream(bao.toByteArray());
-			ois = new ObjectInputStream(bai);
-
-			return (T) ois.readObject();
-		} catch (Exception e) {
-			throw uncheck(e);
-		} finally {
-			IOs.freeQuietly(oos, ois);
+			serialize((Serializable) prototype, bao);
+			return (T) deserialize(new ByteArrayInputStream(bao.toByteArray()));
 		}
+
+		throw new IllegalArgumentException("what can i do ? maybe only you know.");
 	}
 
 	/**
@@ -410,8 +409,7 @@ public abstract class Lang {
 
 		// duck typing
 		Class<?> eachType = Ghost.me(each.getClass()).genericsType();
-		if (ghost.hasReturnTypeMethod("get", eachType, int.class)
-				&& ghost.hasReturnTypeMethod("size", int.class)) {
+		if (ghost.hasReturnTypeMethod("get", eachType, int.class) && ghost.hasReturnTypeMethod("size", int.class)) {
 
 			int length = (Integer) ghost.invoke(obj, "size");
 			for (int i = 0; i < length; i++) {
@@ -421,8 +419,7 @@ public abstract class Lang {
 			return;
 		}
 
-		if (ghost.hasReturnTypeMethod("get", eachType, int.class)
-				&& ghost.hasReturnTypeMethod("length", int.class)) {
+		if (ghost.hasReturnTypeMethod("get", eachType, int.class) && ghost.hasReturnTypeMethod("length", int.class)) {
 
 			int length = (Integer) ghost.invoke(obj, "length");
 			for (int i = 0; i < length; i++) {
@@ -432,8 +429,7 @@ public abstract class Lang {
 			return;
 		}
 
-		if (ghost.hasReturnTypeMethod("hasNext", boolean.class)
-				&& ghost.hasReturnTypeMethod("next", eachType)) {
+		if (ghost.hasReturnTypeMethod("hasNext", boolean.class) && ghost.hasReturnTypeMethod("next", eachType)) {
 
 			int index = 0;
 			while ((Boolean) ghost.invoke(obj, "hasNext")) {
@@ -548,7 +544,8 @@ public abstract class Lang {
 			if (milliseconds > 0) {
 				Thread.sleep(milliseconds);
 			}
-		} catch (Exception ingore) {}
+		} catch (Exception ingore) {
+		}
 	}
 
 	/**
@@ -578,5 +575,6 @@ public abstract class Lang {
 		}
 	}
 
-	private Lang() {}
+	private Lang() {
+	}
 }
