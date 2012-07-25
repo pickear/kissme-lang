@@ -10,18 +10,18 @@ import java.util.RandomAccess;
  * @author loudyn
  * 
  */
-class TransformingRandomAccessList<F, T> extends AbstractList<T> implements RandomAccess, Serializable {
+class TransformingRandomAccessList<Input, Output> extends AbstractList<Output> implements RandomAccess, Serializable {
 
-	final List<F> fromList;
-	final Function<? super F, ? extends T> function;
+	final List<Input> fromList;
+	final Function<? super Input, ? extends Output> function;
 
-	TransformingRandomAccessList(List<F> fromList, Function<? super F, ? extends T> function) {
+	TransformingRandomAccessList(List<Input> fromList, Function<? super Input, ? extends Output> function) {
 		this.fromList = fromList;
 		this.function = function;
 	}
 
 	@Override
-	public T get(int index) {
+	public Output get(int index) {
 		return function.apply(fromList.get(index));
 	}
 
@@ -31,7 +31,7 @@ class TransformingRandomAccessList<F, T> extends AbstractList<T> implements Rand
 	}
 
 	@Override
-	public T remove(int index) {
+	public Output remove(int index) {
 		return function.apply(fromList.remove(index));
 	}
 

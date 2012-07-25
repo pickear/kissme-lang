@@ -480,11 +480,11 @@ public abstract class Lang {
 	 * @param function
 	 * @return
 	 */
-	public static <F, T> Iterator<T> transform(final Iterator<F> fromIterator, final Function<? super F, ? extends T> function) {
-		return new TransformedIterator<F, T>(fromIterator) {
+	public static <Input, Output> Iterator<Output> transform(final Iterator<Input> fromIterator, final Function<? super Input, ? extends Output> function) {
+		return new TransformedIterator<Input, Output>(fromIterator) {
 
 			@Override
-			T transform(F from) {
+			Output transform(Input from) {
 				return function.apply(from);
 			}
 		};
@@ -512,11 +512,11 @@ public abstract class Lang {
 	 * @param function
 	 * @return
 	 */
-	public static <F, T> Iterable<T> transform(final Iterable<F> fromIterable, final Function<? super F, ? extends T> function) {
-		return new Iterable<T>() {
+	public static <Input, Output> Iterable<Output> transform(final Iterable<Input> fromIterable, final Function<? super Input, ? extends Output> function) {
+		return new Iterable<Output>() {
 
 			@Override
-			public Iterator<T> iterator() {
+			public Iterator<Output> iterator() {
 				return transform(fromIterable.iterator(), function);
 			}
 
@@ -529,9 +529,9 @@ public abstract class Lang {
 	 * @param function
 	 * @return
 	 */
-	public static <F, T> List<T> transform(final List<F> fromList, final Function<? super F, ? extends T> function) {
-		return fromList instanceof RandomAccess ? new TransformingRandomAccessList<F, T>(fromList, function)
-				: new TransformingSequentialList<F, T>(fromList, function);
+	public static <Input, Output> List<Output> transform(final List<Input> fromList, final Function<? super Input, ? extends Output> function) {
+		return fromList instanceof RandomAccess ? new TransformingRandomAccessList<Input, Output>(fromList, function)
+				: new TransformingSequentialList<Input, Output>(fromList, function);
 	}
 
 	/**

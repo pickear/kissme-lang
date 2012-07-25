@@ -5,12 +5,12 @@ package com.kissme.lang;
  * @author loudyn
  * 
  */
-public interface Function<F, T> {
+public interface Function<Input, Output> {
 	
 	/**
 	 * 
 	 * @param input
 	 * @return
 	 */
-	T apply(F input);
+	Output apply(Input input);
 }
