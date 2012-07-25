@@ -10,21 +10,21 @@ import java.util.ListIterator;
  * @author loudyn
  * 
  */
-class TransformingSequentialList<F, T> extends AbstractSequentialList<T> implements Serializable {
+class TransformingSequentialList<Input, Output> extends AbstractSequentialList<Output> implements Serializable {
 
 
-	final List<F> fromList;
-	final Function<? super F, ? extends T> function;
+	final List<Input> fromList;
+	final Function<? super Input, ? extends Output> function;
 
-	TransformingSequentialList(List<F> fromList, Function<? super F, ? extends T> function) {
+	TransformingSequentialList(List<Input> fromList, Function<? super Input, ? extends Output> function) {
 		this.fromList = fromList;
 		this.function = function;
 	}
 
 	@Override
-	public ListIterator<T> listIterator(int index) {
-		final ListIterator<F> delegate = fromList.listIterator(index);
-		return new ListIterator<T>() {
+	public ListIterator<Output> listIterator(int index) {
+		final ListIterator<Input> delegate = fromList.listIterator(index);
+		return new ListIterator<Output>() {
 
 			@Override
 			public boolean hasNext() {
@@ -32,7 +32,7 @@ class TransformingSequentialList<F, T> extends AbstractSequentialList<T> impleme
 			}
 
 			@Override
-			public T next() {
+			public Output next() {
 				return function.apply(delegate.next());
 			}
 
@@ -42,7 +42,7 @@ class TransformingSequentialList<F, T> extends AbstractSequentialList<T> impleme
 			}
 
 			@Override
-			public T previous() {
+			public Output previous() {
 				return function.apply(delegate.previous());
 			}
 
@@ -62,12 +62,12 @@ class TransformingSequentialList<F, T> extends AbstractSequentialList<T> impleme
 			}
 
 			@Override
-			public void set(T e) {
+			public void set(Output e) {
 				throw new UnsupportedOperationException();
 			}
 
 			@Override
-			public void add(T e) {
+			public void add(Output e) {
 				throw new UnsupportedOperationException();
 			}
 
