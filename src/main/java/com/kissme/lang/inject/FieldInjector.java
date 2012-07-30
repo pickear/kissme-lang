@@ -9,7 +9,7 @@ import com.kissme.lang.Lang;
  * @author loudyn
  * 
  */
-public class FieldInjector implements Injector {
+class FieldInjector implements Injector {
 	private final Object me;
 	private final Field field;
 
@@ -18,7 +18,7 @@ public class FieldInjector implements Injector {
 	 * @param me
 	 * @param field
 	 */
-	public FieldInjector(Object me, Field field) {
+	FieldInjector(Object me, Field field) {
 		this.me = me;
 		this.field = field;
 		this.field.setAccessible(true);

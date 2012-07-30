@@ -16,7 +16,7 @@ class ConstructorBorning<T> implements Borning<T> {
 	 * 
 	 * @param constructor
 	 */
-	public ConstructorBorning(Constructor<T> constructor, Object[] args) {
+	ConstructorBorning(Constructor<T> constructor, Object[] args) {
 		this.constructor = constructor;
 		this.constructor.setAccessible(true);
 		this.args = args;

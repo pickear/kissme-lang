@@ -19,7 +19,7 @@ class GetterEjector implements Ejector {
 	 * @param me
 	 * @param getter
 	 */
-	public GetterEjector(Object me, Method getter) {
+	GetterEjector(Object me, Method getter) {
 		this.me = me;
 		this.getter = getter;
 	}

@@ -15,7 +15,7 @@ class EmptyArgsConstructorBorning<T> implements Borning<T> {
 	 * 
 	 * @param constructor
 	 */
-	public EmptyArgsConstructorBorning(Constructor<T> constructor) {
+	EmptyArgsConstructorBorning(Constructor<T> constructor) {
 		this.constructor = constructor;
 		this.constructor.setAccessible(true);
 	}

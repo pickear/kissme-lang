@@ -17,7 +17,7 @@ class FactoryMethodBorning<T> implements Borning<T> {
 	 * @param method
 	 * @param args
 	 */
-	public FactoryMethodBorning(Method method,Object[] args) {
+	FactoryMethodBorning(Method method,Object[] args) {
 		this.method = method;
 		this.method.setAccessible(true);
 		this.args = args;

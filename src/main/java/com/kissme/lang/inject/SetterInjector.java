@@ -9,7 +9,7 @@ import com.kissme.lang.Lang;
  * @author loudyn
  * 
  */
-public class SetterInjector implements Injector {
+class SetterInjector implements Injector {
 
 	private final Object me;
 	private final Method setter;
@@ -19,7 +19,7 @@ public class SetterInjector implements Injector {
 	 * @param me
 	 * @param setter
 	 */
-	public SetterInjector(Object me, Method setter) {
+	SetterInjector(Object me, Method setter) {
 		this.me = me;
 		this.setter = setter;
 	}
