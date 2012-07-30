@@ -19,7 +19,7 @@ class FieldEjector implements Ejector {
 	 * @param me
 	 * @param field
 	 */
-	public FieldEjector(Object me, Field field) {
+	FieldEjector(Object me, Field field) {
 		this.me = me;
 		this.field = field;
 		this.field.setAccessible(true);

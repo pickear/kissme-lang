@@ -14,7 +14,7 @@ class EmptyArgsFactoryMethodBorning<T> implements Borning<T> {
 	 * 
 	 * @param method
 	 */
-	public EmptyArgsFactoryMethodBorning(Method method) {
+	EmptyArgsFactoryMethodBorning(Method method) {
 		this.method = method;
 		this.method.setAccessible(true);
 	}
