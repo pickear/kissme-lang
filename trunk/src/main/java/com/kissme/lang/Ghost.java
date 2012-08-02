@@ -33,6 +33,16 @@ public class Ghost<T> {
 
 	/**
 	 * 
+	 * @param obj
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> Ghost<T> me(T obj) {
+		return (Ghost<T>) me(obj.getClass());
+	}
+
+	/**
+	 * 
 	 * @param clazz
 	 * @return
 	 */
