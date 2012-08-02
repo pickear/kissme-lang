@@ -15,15 +15,7 @@ import com.kissme.lang.Preconditions;
  */
 public class DeleteFileCommand implements FileCommand {
 	private final File file;
-
-	/**
-	 * 
-	 * @param fileName
-	 */
-	public DeleteFileCommand(final String fileName) {
-		this(new File(fileName));
-	}
-
+	
 	/**
 	 * 
 	 * @param file

@@ -5,10 +5,12 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 
+import com.kissme.lang.file.AppendToFileCommand;
 import com.kissme.lang.file.CopyFileCommand;
 import com.kissme.lang.file.DeleteFileCommand;
 import com.kissme.lang.file.FileCommandInvoker;
@@ -94,6 +96,32 @@ public abstract class Files {
 	 */
 	public static void writeTo(File file, OutputStream out, boolean close) {
 		new WriteFileToCommand(file, out, close).execute();
+	}
+
+	/**
+	 * 
+	 * @param file
+	 * @param data
+	 * @param encoding
+	 */
+	public static void appendTo(File file, String data, String encoding) {
+		try {
+
+			appendTo(file, data.getBytes(encoding));
+		} catch (UnsupportedEncodingException e) {
+			throw Lang.uncheck(e);
+		}
+	}
+
+	/**
+	 * 
+	 * @param file
+	 * @param datas
+	 */
+	public static void appendTo(File file, byte[] datas) {
+		new FileCommandInvoker().command(new MakeFileCommand(file))
+								.command(new AppendToFileCommand(file, datas))
+								.invoke();
 	}
 
 	/**
@@ -223,9 +251,9 @@ public abstract class Files {
 	public static void move(File source, File target) {
 
 		new FileCommandInvoker().command(new MakeFileCommand(target))
-								.command(new CopyFileCommand(source, target))
-								.command(new DeleteFileCommand(source))
-								.invoke();
+				.command(new CopyFileCommand(source, target))
+				.command(new DeleteFileCommand(source))
+				.invoke();
 	}
 
 	/**

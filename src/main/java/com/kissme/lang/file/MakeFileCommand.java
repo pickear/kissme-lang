@@ -12,10 +12,6 @@ import com.kissme.lang.Preconditions;
 public class MakeFileCommand implements FileCommand {
 	private final File file;
 
-	public MakeFileCommand(String fileName) {
-		this(new File(fileName));
-	}
-
 	public MakeFileCommand(File file) {
 		Preconditions.notNull(file);
 		this.file = file;
