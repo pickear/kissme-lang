@@ -251,9 +251,9 @@ public abstract class Files {
 	public static void move(File source, File target) {
 
 		new FileCommandInvoker().command(new MakeFileCommand(target))
-				.command(new CopyFileCommand(source, target))
-				.command(new DeleteFileCommand(source))
-				.invoke();
+								.command(new CopyFileCommand(source, target))
+								.command(new DeleteFileCommand(source))
+								.invoke();
 	}
 
 	/**
