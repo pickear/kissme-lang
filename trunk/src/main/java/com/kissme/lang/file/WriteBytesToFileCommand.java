@@ -20,13 +20,9 @@ public class WriteBytesToFileCommand implements FileCommand {
 	public WriteBytesToFileCommand(File target, byte[] content) {
 		Preconditions.notNull(target);
 		Preconditions.notNull(content);
-		
+
 		this.target = target;
 		this.content = content;
-	}
-
-	public WriteBytesToFileCommand(String target, byte[] content) {
-		this(new File(target), content);
 	}
 
 	/*

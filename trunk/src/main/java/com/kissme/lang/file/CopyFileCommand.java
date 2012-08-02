@@ -25,19 +25,10 @@ public class CopyFileCommand implements FileCommand {
 	 * @param source
 	 * @param target
 	 */
-	public CopyFileCommand(String source, String target) {
-		this(new File(source), new File(target));
-	}
-
-	/**
-	 * 
-	 * @param source
-	 * @param target
-	 */
 	public CopyFileCommand(File source, File target) {
 		Preconditions.notNull(source);
 		Preconditions.notNull(target);
-		
+
 		this.source = source;
 		this.target = target;
 	}
@@ -48,12 +39,11 @@ public class CopyFileCommand implements FileCommand {
 	 * @see com.kissme.lang.file.FileCommand#execute()
 	 */
 	public void execute() {
-		
-		
-		if(!source.exists()){
+
+		if (!source.exists()) {
 			throw Lang.uncheck(new FileNotFoundException("the source file didn't exist!"));
 		}
-		
+
 		InputStream in = null;
 		OutputStream out = null;
 
