@@ -43,7 +43,7 @@ public abstract class Files {
 		try {
 
 			out = new ByteArrayOutputStream();
-			new WriteFileToCommand(file, out, true);
+			new WriteFileToCommand(file, out, true).execute();
 			return out.toByteArray();
 		} catch (Exception e) {
 			throw Lang.uncheck(e);
@@ -134,8 +134,8 @@ public abstract class Files {
 	 */
 	public static void appendTo(File file, byte[] datas) {
 		new FileCommandInvoker().command(new MakeFileCommand(file))
-				.command(new AppendToFileCommand(file, datas))
-				.invoke();
+								.command(new AppendToFileCommand(file, datas))
+								.invoke();
 	}
 
 	/**
@@ -265,9 +265,9 @@ public abstract class Files {
 	public static void move(File source, File target) {
 
 		new FileCommandInvoker().command(new MakeFileCommand(target))
-				.command(new CopyFileCommand(source, target))
-				.command(new DeleteFileCommand(source))
-				.invoke();
+								.command(new CopyFileCommand(source, target))
+								.command(new DeleteFileCommand(source))
+								.invoke();
 	}
 
 	/**
