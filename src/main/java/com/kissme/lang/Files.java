@@ -25,8 +25,8 @@ import com.kissme.lang.file.WriteFileToCommand;
  */
 public abstract class Files {
 
-	private static final String UNIX_SEPERATOR = "/";
-	private static final String WINDOW_SEPERATOR = "\\";
+	public static final String UNIX_SEPERATOR = "/";
+	public static final String WINDOW_SEPERATOR = "\\";
 
 	/**
 	 * 
