@@ -55,6 +55,20 @@ public abstract class Files {
 	/**
 	 * 
 	 * @param file
+	 * @param encoding
+	 * @return
+	 */
+	public static String read(File file, String encoding) {
+		try {
+			return new String(read(file), encoding);
+		} catch (UnsupportedEncodingException e) {
+			throw Lang.uncheck(e);
+		}
+	}
+
+	/**
+	 * 
+	 * @param file
 	 * @param content
 	 */
 	public static void write(File file, byte[] content) {
@@ -120,8 +134,8 @@ public abstract class Files {
 	 */
 	public static void appendTo(File file, byte[] datas) {
 		new FileCommandInvoker().command(new MakeFileCommand(file))
-								.command(new AppendToFileCommand(file, datas))
-								.invoke();
+				.command(new AppendToFileCommand(file, datas))
+				.invoke();
 	}
 
 	/**
@@ -251,9 +265,9 @@ public abstract class Files {
 	public static void move(File source, File target) {
 
 		new FileCommandInvoker().command(new MakeFileCommand(target))
-								.command(new CopyFileCommand(source, target))
-								.command(new DeleteFileCommand(source))
-								.invoke();
+				.command(new CopyFileCommand(source, target))
+				.command(new DeleteFileCommand(source))
+				.invoke();
 	}
 
 	/**
