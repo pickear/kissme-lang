@@ -64,6 +64,34 @@ public abstract class Strings {
 	/**
 	 * 
 	 * @param text
+	 * @param prefix
+	 * @return
+	 */
+	public boolean startsWith(String text, String prefix) {
+		if (isBlank(text)) {
+			return false;
+		}
+
+		return text.startsWith(prefix);
+	}
+
+	/**
+	 * 
+	 * @param text
+	 * @param suffix
+	 * @return
+	 */
+	public boolean endsWith(String text, String suffix) {
+		if (isBlank(text)) {
+			return false;
+		}
+
+		return text.endsWith(suffix);
+	}
+
+	/**
+	 * 
+	 * @param text
 	 * @param delimiter
 	 * @return
 	 */
