@@ -336,6 +336,10 @@ public abstract class Files {
 	 * @return
 	 */
 	public static String[] split(String filename) {
+		if (Strings.isBlank(filename)) {
+			return new String[] { "", "" };
+		}
+
 		filename = asUnix(filename);
 		int index = filename.lastIndexOf(UNIX_SEPERATOR);
 		if (index == -1) {
@@ -386,6 +390,9 @@ public abstract class Files {
 	 * @return
 	 */
 	public static String asPlatform(String path) {
+		if (Strings.isBlank(path)) {
+			return path;
+		}
 		return path.replaceAll("[/|\\\\]+", Matcher.quoteReplacement(File.separator));
 	}
 
@@ -395,6 +402,9 @@ public abstract class Files {
 	 * @return
 	 */
 	public static String asUnix(String path) {
+		if (Strings.isBlank(path)) {
+			return path;
+		}
 		return path.replaceAll("[/|\\\\]+", UNIX_SEPERATOR);
 	}
 
@@ -404,6 +414,9 @@ public abstract class Files {
 	 * @return
 	 */
 	public static String asWindow(String path) {
+		if (Strings.isBlank(path)) {
+			return path;
+		}
 		return path.replaceAll("[/|\\\\]+", Matcher.quoteReplacement(WINDOW_SEPERATOR));
 	}
 
@@ -413,6 +426,9 @@ public abstract class Files {
 	 * @return
 	 */
 	public static String asPackage(String path) {
+		if (Strings.isBlank(path)) {
+			return path;
+		}
 		return path.replaceAll("[/|\\\\]+", "\\.");
 	}
 
