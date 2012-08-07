@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -629,6 +630,17 @@ public class Ghost<T> {
 		for (Type type : types) {
 			if (type instanceof Class<?>) {
 				clazzes.add((Class<?>) type);
+				continue;
+			}
+
+			if (type instanceof ParameterizedType) {
+				clazzes.add((Class<?>) ((ParameterizedType) type).getRawType());
+				continue;
+			}
+
+			if (type instanceof TypeVariable<?>) {
+				TypeVariable<?> tv = (TypeVariable<?>) type;
+				clazzes.add((Class<?>) tv.getBounds()[0]);
 			}
 		}
 		return clazzes;
