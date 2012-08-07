@@ -408,7 +408,7 @@ public abstract class Lang {
 		}
 
 		// duck typing
-		Class<?> eachType = Ghost.me(each.getClass()).genericsType();
+		Class<?> eachType = Ghost.me(each.getClass()).genericsType(Each.class);
 		if (ghost.hasReturnTypeMethod("get", eachType, int.class) && ghost.hasReturnTypeMethod("size", int.class)) {
 
 			int length = (Integer) ghost.invoke(obj, "size");
