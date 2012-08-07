@@ -3,6 +3,7 @@ package com.kissme.lang;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
@@ -564,42 +565,65 @@ public class Ghost<T> {
 	 * 
 	 * @return
 	 */
-	public Class<?> genericsType() {
-		if (genericsTypes().length == 0) {
+	public Class<?> genericsType(Class<?> superClazz) {
+		if (genericsTypes(superClazz).length == 0) {
 			return Object.class;
 		}
 
-		return genericsTypes()[0];
+		return genericsTypes(superClazz)[0];
 	}
 
 	/**
 	 * 
 	 * @return
 	 */
-	public Class<?>[] genericsTypes() {
+	public Class<?>[] genericsTypes(Class<?> superClazz) {
+
+		Type type = getGenericSupertype(clazz, superClazz);
 
 		List<Class<?>> types = new LinkedList<Class<?>>();
-
-		// find super class
-		Type type = clazz.getGenericSuperclass();
 		if (type instanceof ParameterizedType) {
 			Type[] paramTypes = ((ParameterizedType) type).getActualTypeArguments();
 			types.addAll(evalTypesAsClasses(paramTypes));
-		}
-
-		// and find interfaces now
-		Type[] itypes = clazz.getGenericInterfaces();
-		for (Type itype : itypes) {
-			if (itype instanceof ParameterizedType) {
-				Type[] ptypes = ((ParameterizedType) itype).getActualTypeArguments();
-				types.addAll(evalTypesAsClasses(ptypes));
-			}
+		} else if (type instanceof GenericArrayType) {
+			Type paramType = ((GenericArrayType) type).getGenericComponentType();
+			types.add(evalTypesAsClasses(paramType).get(0));
 		}
 
 		return types.toArray(new Class<?>[types.size()]);
 	}
 
-	private List<Class<?>> evalTypesAsClasses(Type[] types) {
+	private Type getGenericSupertype(Class<?> raw, Class<?> toResolve) {
+
+		if (toResolve.isInterface()) {
+			Class<?>[] interfaces = raw.getInterfaces();
+			for (int i = 0, length = interfaces.length; i < length; i++) {
+				if (interfaces[i] == toResolve) {
+					return clazz.getGenericInterfaces()[i];
+				} else if (toResolve.isAssignableFrom(interfaces[i])) {
+					return getGenericSupertype(interfaces[i], toResolve);
+				}
+			}
+		}
+
+		// check our supertypes
+		if (!raw.isInterface()) {
+			while (raw != Object.class) {
+				Class<?> rawSupertype = raw.getSuperclass();
+				if (rawSupertype == toResolve) {
+					return raw.getGenericSuperclass();
+				} else if (toResolve.isAssignableFrom(rawSupertype)) {
+					return getGenericSupertype(rawSupertype, toResolve);
+				}
+				raw = rawSupertype;
+			}
+		}
+
+		// we can't resolve this further
+		return toResolve;
+	}
+
+	private List<Class<?>> evalTypesAsClasses(Type... types) {
 
 		List<Class<?>> clazzes = new LinkedList<Class<?>>();
 		for (Type type : types) {
