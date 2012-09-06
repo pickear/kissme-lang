@@ -211,10 +211,6 @@ public abstract class Files {
 			return;
 		}
 
-		if (!directory.canRead()) {
-			return;
-		}
-
 		File[] innerFiles = directory.listFiles(fileFilter);
 		if (null == innerFiles || innerFiles.length == 0) {
 			return;
