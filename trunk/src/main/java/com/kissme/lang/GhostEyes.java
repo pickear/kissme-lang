@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public final class GhostEyes<T> {
 
-	private Class<T> clazz;
+	private final Class<T> clazz;
 
 	/**
 	 * 
@@ -184,6 +184,14 @@ public final class GhostEyes<T> {
 	 */
 	public boolean isBoolean() {
 		return is(boolean.class) || is(Boolean.class);
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public boolean isCloneable() {
+		return isOf(Cloneable.class);
 	}
 
 	/**
