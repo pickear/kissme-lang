@@ -112,8 +112,8 @@ public final class Strings {
 	 * @return
 	 */
 	public static String join(Iterable<String> it, String delimiter) {
-		Preconditions.isNull(it);
-		Preconditions.isNull(delimiter);
+		Preconditions.notNull(it);
+		Preconditions.notNull(delimiter);
 
 		StringBuilder buf = new StringBuilder();
 		Iterator<String> iterator = it.iterator();
