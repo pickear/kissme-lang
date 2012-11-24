@@ -11,5 +11,5 @@ import java.lang.annotation.Target;
  * 
  */
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.TYPE)
+@Target({ ElementType.FIELD, ElementType.PARAMETER })
 public @interface Nullable {}
