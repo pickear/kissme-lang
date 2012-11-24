@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
  * @author loudyn
  * 
  */
-public abstract class Ejectors {
+public final class Ejectors {
 
 	/**
 	 * 

@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
  * @author loudyn
  * 
  */
-public abstract class Invokers {
+public final class Invokers {
 
 	/**
 	 * 

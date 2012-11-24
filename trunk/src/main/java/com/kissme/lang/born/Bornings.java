@@ -9,7 +9,7 @@ import com.kissme.lang.Ghost;
  * @author loudyn
  * 
  */
-public abstract class Bornings {
+public final class Bornings {
 
 	/**
 	 * 
