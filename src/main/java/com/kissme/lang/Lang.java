@@ -26,7 +26,7 @@ import java.util.Set;
  * @author loudyn
  * 
  */
-public abstract class Lang {
+public final class Lang {
 
 	/**
 	 * 
@@ -228,14 +228,14 @@ public abstract class Lang {
 	public static <T> T clone(T prototype) {
 
 		Ghost<T> me = (Ghost<T>) Ghost.me(prototype.getClass());
-		if (me.openEyes().isOf(Cloneable.class)) {
+		if (me.openEyes().isCloneable()) {
 			return (T) me.invoke(prototype, "clone");
 		}
 
-		if (me.openEyes().isOf(Serializable.class)) {
+		if (me.openEyes().isSerializable()) {
 			ByteArrayOutputStream bao = new ByteArrayOutputStream();
-			serialize((Serializable) prototype, bao);
-			return (T) deserialize(new ByteArrayInputStream(bao.toByteArray()));
+			Lang.serialize((Serializable) prototype, bao);
+			return (T) Lang.deserialize(new ByteArrayInputStream(bao.toByteArray()));
 		}
 
 		throw new IllegalArgumentException("what can i do ? maybe only you know.");
@@ -256,7 +256,7 @@ public abstract class Lang {
 			oos.writeObject(obj);
 			oos.flush();
 		} catch (Exception e) {
-			throw uncheck(e);
+			throw Lang.uncheck(e);
 		} finally {
 			IOs.freeQuietly(oos, out);
 		}
@@ -275,7 +275,7 @@ public abstract class Lang {
 			ooi = new ObjectInputStream(in);
 			return ooi.readObject();
 		} catch (Exception e) {
-			throw uncheck(e);
+			throw Lang.uncheck(e);
 		} finally {
 			IOs.freeQuietly(ooi, in);
 		}
@@ -501,7 +501,7 @@ public abstract class Lang {
 
 			@Override
 			public Iterator<T> iterator() {
-				return filter(unfilter.iterator(), predicate);
+				return Lang.filter(unfilter.iterator(), predicate);
 			}
 		};
 	}
@@ -517,7 +517,7 @@ public abstract class Lang {
 
 			@Override
 			public Iterator<Output> iterator() {
-				return transform(fromIterable.iterator(), function);
+				return Lang.transform(fromIterable.iterator(), function);
 			}
 
 		};
@@ -544,8 +544,7 @@ public abstract class Lang {
 			if (milliseconds > 0) {
 				Thread.sleep(milliseconds);
 			}
-		} catch (Exception ingore) {
-		}
+		} catch (Exception ignore) {}
 	}
 
 	/**
@@ -570,11 +569,10 @@ public abstract class Lang {
 			return end;
 		}
 
-		public long getElapse() {
+		public long elapsed() {
 			return end - start;
 		}
 	}
 
-	private Lang() {
-	}
+	private Lang() {}
 }

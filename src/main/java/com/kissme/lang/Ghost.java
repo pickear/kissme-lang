@@ -26,7 +26,10 @@ import com.kissme.lang.invoke.Invokers;
  * @author loudyn
  * 
  */
-public class Ghost<T> {
+public final class Ghost<T> {
+
+	private final Class<T> clazz;
+	private final GhostEyes<T> ghostEyes;
 
 	private Ghost(Class<T> clazz) {
 		this.clazz = clazz;
@@ -40,7 +43,7 @@ public class Ghost<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> Ghost<T> me(T obj) {
-		return (Ghost<T>) me(obj.getClass());
+		return (Ghost<T>) Ghost.me(obj.getClass());
 	}
 
 	/**
@@ -72,9 +75,6 @@ public class Ghost<T> {
 
 		return true;
 	}
-
-	private Class<T> clazz;
-	private GhostEyes<T> ghostEyes;
 
 	/**
 	 * 
@@ -260,11 +260,8 @@ public class Ghost<T> {
 	 * @return
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> anno, Class<?> top) {
-		if (clazz.isAnnotationPresent(anno)) {
-			return true;
-		}
 
-		Class<?> superClazz = clazz.getSuperclass();
+		Class<?> superClazz = clazz;
 		while (null != superClazz && superClazz != top) {
 			if (superClazz.isAnnotationPresent(anno)) {
 				return true;
@@ -273,8 +270,13 @@ public class Ghost<T> {
 			superClazz = superClazz.getSuperclass();
 		}
 
-		return false;
+		for (Class<?> ifClazz : clazz.getInterfaces()) {
+			if (ifClazz.isAnnotationPresent(anno)) {
+				return true;
+			}
+		}
 
+		return false;
 	}
 
 	/**
@@ -297,14 +299,22 @@ public class Ghost<T> {
 	}
 
 	private <A extends Annotation> A annotation(Class<?> clazz, Class<A> anno, Class<?> top) {
-		A result = clazz.getAnnotation(anno);
-		if (null != result) {
-			return result;
+
+		Class<?> superClazz = clazz;
+		while (null != superClazz && superClazz != top) {
+			A result = superClazz.getAnnotation(anno);
+			if (null != result) {
+				return result;
+			}
+
+			superClazz = superClazz.getSuperclass();
 		}
 
-		Class<?> superClazz = clazz.getSuperclass();
-		if (superClazz != top) {
-			return annotation(superClazz, anno, top);
+		for (Class<?> ifClazz : clazz.getInterfaces()) {
+			A result = ifClazz.getAnnotation(anno);
+			if (null != result) {
+				return result;
+			}
 		}
 
 		return null;

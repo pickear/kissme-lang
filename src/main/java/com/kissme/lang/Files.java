@@ -23,7 +23,7 @@ import com.kissme.lang.file.WriteFileToCommand;
  * @author loudyn
  * 
  */
-public abstract class Files {
+public final class Files {
 
 	public static final String UNIX_SEPERATOR = "/";
 	public static final String WINDOW_SEPERATOR = "\\";
@@ -98,7 +98,7 @@ public abstract class Files {
 
 			write(file, content.getBytes(encoding));
 		} catch (Exception e) {
-			Lang.uncheck(e);
+			throw Lang.uncheck(e);
 		}
 	}
 
@@ -457,7 +457,7 @@ public abstract class Files {
 	private static final char[] DIGITS_UPPER = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 
 	private static String fileHexHeader(byte[] bytes) {
-		int length = bytes.length;
+		int length = 32;
 		char[] out = new char[length << 1];
 		for (int i = 0, j = 0; i < length; i++) {
 			out[j++] = DIGITS_UPPER[(0xF0 & bytes[i]) >>> 4];
@@ -468,7 +468,7 @@ public abstract class Files {
 	}
 
 	public static enum FileType {
-		JPG("jpg", "FFD8FFE0"), ICO("ico", "00000100"), BMP("bmp", "424D"), GIF("gif", "47494638"), PNG("png", "89504E47"),
+		JPG("jpg", "FFD8FF"), ICO("ico", "00000100"), BMP("bmp", "424D"), GIF("gif", "47494638"), PNG("png", "89504E47"),
 		ZIP("zip", "504B0304"), RAR("rar", "52617221"),
 		PDF("pdf", "25504446"), DOC_OR_XLS_OR_PPT("doc;xls;ppt", "D0CF11E0"), DOCX("docx", "504B0304");
 

@@ -12,7 +12,7 @@ import java.util.List;
  * @author loudyn
  * 
  */
-public abstract class IOs {
+public final class IOs {
 
 	/**
 	 * @param in

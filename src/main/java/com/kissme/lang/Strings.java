@@ -1,11 +1,13 @@
 package com.kissme.lang;
 
+import java.util.Iterator;
+
 /**
  * 
  * @author loudyn
  * 
  */
-public abstract class Strings {
+public final class Strings {
 
 	/**
 	 * 
@@ -67,7 +69,7 @@ public abstract class Strings {
 	 * @param prefix
 	 * @return
 	 */
-	public boolean startsWith(String text, String prefix) {
+	public static boolean startsWith(String text, String prefix) {
 		if (isBlank(text)) {
 			return false;
 		}
@@ -81,7 +83,7 @@ public abstract class Strings {
 	 * @param suffix
 	 * @return
 	 */
-	public boolean endsWith(String text, String suffix) {
+	public static boolean endsWith(String text, String suffix) {
 		if (isBlank(text)) {
 			return false;
 		}
@@ -103,6 +105,112 @@ public abstract class Strings {
 		return text.split(delimiter);
 	}
 
-	private Strings() {}
+	/**
+	 * 
+	 * @param it
+	 * @param delimiter
+	 * @return
+	 */
+	public static String join(Iterable<String> it, String delimiter) {
+		Preconditions.isNull(it);
+		Preconditions.isNull(delimiter);
 
+		StringBuilder buf = new StringBuilder();
+		Iterator<String> iterator = it.iterator();
+		while (iterator.hasNext()) {
+			buf.append(iterator.next()).append(delimiter);
+		}
+
+		return buf.substring(0, buf.length() - 1);
+	}
+
+	/**
+	 * 
+	 * @param text
+	 * @return
+	 */
+	public static String nullToEmpty(String text) {
+		return null == text ? "" : text;
+	}
+
+	/**
+	 * 
+	 * @param text
+	 * @return
+	 */
+	public static String emptyToNull(String text) {
+		return isEmpty(text) ? null : text;
+	}
+
+	/**
+	 * 
+	 * @param text
+	 * @param minLength
+	 * @param padChar
+	 * @return
+	 */
+	public static String padLeft(String text, int minLength, char padChar) {
+		Preconditions.notNull(text);
+		if (text.length() >= minLength) {
+			return text;
+		}
+
+		StringBuilder buf = new StringBuilder(minLength);
+		for (int i = text.length(); i < minLength; i++) {
+			buf.append(padChar);
+		}
+
+		return buf.append(text).toString();
+	}
+
+	/**
+	 * 
+	 * @param text
+	 * @param minLength
+	 * @param padChar
+	 * @return
+	 */
+	public static String padRight(String text, int minLength, char padChar) {
+		Preconditions.notNull(text);
+		if (text.length() >= minLength) {
+			return text;
+		}
+
+		StringBuilder buf = new StringBuilder(minLength).append(text);
+		for (int i = text.length(); i < minLength; i++) {
+			buf.append(padChar);
+		}
+
+		return buf.toString();
+	}
+
+	/**
+	 * 
+	 * @param text
+	 * @param count
+	 * @return
+	 */
+	public static String repeat(String text, int count) {
+		Preconditions.notNull(text);
+		Preconditions.isTrue(count > 0);
+
+		int len = text.length();
+		long longSize = (long) len * (long) count;
+		int size = (int) longSize;
+		Preconditions.isTrue(
+								size == longSize,
+								new ArrayIndexOutOfBoundsException("Required array size too large: " + String.valueOf(longSize))
+				);
+
+		final char[] array = new char[size];
+		text.getChars(0, len, array, 0);
+		int n;
+		for (n = len; n < size - n; n <<= 1) {
+			System.arraycopy(array, 0, array, n, n);
+		}
+		System.arraycopy(array, 0, array, n, size - n);
+		return new String(array);
+	}
+
+	private Strings() {}
 }
