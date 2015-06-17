@@ -1,0 +1,1 @@
+a java lib to make java more sweet
